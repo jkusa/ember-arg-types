@@ -1,4 +1,5 @@
 # ember-arg-types
+[![Build Status](https://travis-ci.org/jkusa/ember-arg-types.svg?branch=master)](https://travis-ci.org/jkusa/ember-arg-types)
 
 Runtime type checking & defaulting for glimmer component arguments powered by [prop-types](https://github.com/facebook/prop-types) & decorators.
 
