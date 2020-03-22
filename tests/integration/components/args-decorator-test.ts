@@ -57,7 +57,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     setupOnerror(function({ message }: Error) {
       assert.equal(
         message,
-        'Warning: Failed prop type: Invalid prop `hearts` of type `string` supplied to `CharacterComponent`, expected `number`.',
+        'Failed prop type: Invalid prop `hearts` of type `string` supplied to `CharacterComponent`, expected `number`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
       );
     });
@@ -67,7 +67,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     setupOnerror(function({ message }: Error) {
       assert.equal(
         message,
-        'Warning: Failed prop type: Invalid prop `level` of type `string` supplied to `CharacterComponent`, expected `number`.',
+        'Failed prop type: Invalid prop `level` of type `string` supplied to `CharacterComponent`, expected `number`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
       );
     });
@@ -77,7 +77,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     setupOnerror(function({ message }: Error) {
       assert.equal(
         message,
-        'Warning: Failed prop type: The prop `name` is marked as required in `CharacterComponent`, but its value is `undefined`.',
+        'Failed prop type: The prop `name` is marked as required in `CharacterComponent`, but its value is `undefined`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
       );
     });
@@ -108,7 +108,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     setupOnerror(function({ message }: Error) {
       assert.equal(
         message,
-        'Warning: Failed prop type: Invalid prop `onClick` of type `string` supplied to `CharacterComponent`, expected `function`.',
+        'Failed prop type: Invalid prop `onClick` of type `string` supplied to `CharacterComponent`, expected `function`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
       );
     });

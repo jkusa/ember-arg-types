@@ -1,8 +1,9 @@
 export default function throwConsoleError(fn: Function, enabled: boolean = true) {
   const original = console.error;
   console.error = enabled
-    ? (...args: any[]) => {
-        throw new Error(args[0]);
+    ? (msg: string) => {
+        const errorMsg = msg.replace(/^Warning: /, '');
+        throw new Error(errorMsg);
       }
     : original;
   try {
