@@ -1,4 +1,5 @@
 # ember-arg-types
+
 [![Build Status](https://travis-ci.org/jkusa/ember-arg-types.svg?branch=master)](https://travis-ci.org/jkusa/ember-arg-types)
 
 Runtime type checking & defaulting for glimmer component arguments powered by [prop-types](https://github.com/facebook/prop-types) & decorators.
@@ -62,9 +63,16 @@ export default class MyComponent extends Component {
 }
 ```
 
-If an argument value fails a validation check, an `Error` will be thrown (in non-prod environments).
-
 You can find more information on `prop-type` validators here: [Prop Type Usage Docs](https://github.com/facebook/prop-types#usage)
+
+If an argument value fails a validation check, an `Error` will be thrown (in non-prod environments) by default. To disable throwing `Error`s , update your `config/environment.js` with the following:
+
+```js
+'ember-prop-types': {
+  // Throw errors instead of logging (default is true)
+  throwErrors: false
+}
+```
 
 ## Production
 

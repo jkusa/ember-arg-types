@@ -3,6 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 //@ts-ignore
 import { click, render, resetOnerror, setupOnerror, settled } from '@ember/test-helpers';
+import config from 'ember-get-config';
 
 module('Integration | Component | arg-decorator', function(hooks) {
   setupRenderingTest(hooks);
@@ -89,12 +90,19 @@ module('Integration | Component | arg-decorator', function(hooks) {
     await settled();
   });
 
-  test('it supports actions', async function(assert) {
-    assert.expect(2);
+  test('type check errors can be disabled', async function(assert) {
+    assert.expect(1);
 
-    setupOnerror(function(_error: Error) {
-      assert.notOk(true, 'A default function can be declared for an action');
-    });
+    config['ember-arg-types']!.throwErrors = false;
+
+    await render(hbs` <Character @name={{true}}/>`);
+    assert.dom('.name').hasText('true', 'When `throwErrors` is set to false, type checks `Error`s are disabled');
+
+    config['ember-arg-types']!.throwErrors = true;
+  });
+
+  test('it supports actions', async function(assert) {
+    assert.expect(3);
 
     await render(hbs`
       <Character
@@ -102,8 +110,9 @@ module('Integration | Component | arg-decorator', function(hooks) {
         @onClick={{this.onClick}}
       />
     `);
-    await settled();
+
     await click('.character');
+    assert.ok(true, 'A default function can be declared for an action');
 
     setupOnerror(function({ message }: Error) {
       assert.equal(

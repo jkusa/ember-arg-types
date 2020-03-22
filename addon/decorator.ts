@@ -3,6 +3,8 @@ import throwConsoleError from './-private/throw-console-error';
 import Component from '@glimmer/component';
 import { runInDebug } from '@ember/debug';
 import PropTypes, { Validator } from 'prop-types';
+import config from 'ember-get-config';
+import { isNone } from '@ember/utils';
 
 function createGetter<T extends Component>(
   _target: object,
@@ -18,11 +20,13 @@ function createGetter<T extends Component>(
       const returnValue = argValue !== undefined ? argValue : defaultValue;
 
       runInDebug(() => {
+        const throwErrors = config['ember-arg-types']?.throwErrors;
+        const shouldThrowErrors = isNone(throwErrors) ? true : throwErrors;
         throwConsoleError(() => {
           if (validator) {
             PropTypes.checkPropTypes({ [key]: validator }, { [key]: returnValue }, 'prop', this.constructor.name);
           }
-        });
+        }, shouldThrowErrors);
       });
 
       return returnValue;
