@@ -2,11 +2,11 @@
 
 [![Build Status](https://travis-ci.org/jkusa/ember-arg-types.svg?branch=master)](https://travis-ci.org/jkusa/ember-arg-types)
 
-Runtime type checking & defaulting for glimmer component arguments powered by [prop-types](https://github.com/facebook/prop-types) & decorators.
+Runtime type checking & defaulting for [glimmer component](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments powered by [prop-types](https://github.com/facebook/prop-types) & decorators.
 
 ## Motivation
 
-`ember-arg-types` provides a decorator (`@arg`) that maps glimmer arguments to local component properties. This allows default values and type checking to be easily declared (and documented) in your component JS file.
+`ember-arg-types` provides a decorator (`@arg`) that maps [glimmer](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments to local component properties. This allows default values and type checking to be easily declared (and documented) in your component JS file.
 
 Example:
 
