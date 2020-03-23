@@ -1,7 +1,7 @@
 {
   "name": "ember-arg-types",
   "version": "0.1.0",
-  "description": "PropType like decorators for Ember Glimmer component args",
+  "description": "Runtime type checking & defaulting for glimmer component arguments powered by prop-types & decorators",
   "keywords": [
     "ember-addon"
   ],
