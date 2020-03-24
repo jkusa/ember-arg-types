@@ -47,7 +47,7 @@ get id() {
 
 ## Type Checking
 
-ember-arg-types uses the popular [prop-types](https://github.com/facebook/prop-types) library for runtime type checking.
+`ember-arg-types` uses the popular [prop-types](https://github.com/facebook/prop-types) library for runtime type checking.
 
 By importing type validators from [prop-types](https://github.com/facebook/prop-types), you can specify a type check parameter to `@arg`:
 
@@ -56,14 +56,27 @@ import Component from '@glimmer/component';
 import { arg } from 'ember-arg-types';
 import { string } from 'prop-types';
 
-export default class MyComponent extends Component {
+export default class CharacterComponent extends Component {
   // `name` string arg that is required
   @arg(string.isRequired)
   name;
 }
 ```
 
+### Example Type Check Error
+
+```hbs
+{{!-- @name should be a string, not a number --}}
+<CharacterComponent @name={{123}}>
+```
+
+![Error Example](error-example.png)
+
+### Prop Type Docs
+
 You can find more information on `prop-type` validators here: [Prop Type Usage Docs](https://github.com/facebook/prop-types#usage)
+
+### Disable Errors
 
 If an argument value fails a validation check, an `Error` will be thrown (in non-prod environments) by default. To disable throwing `Error`s , update your `config/environment.js` with the following:
 
@@ -93,8 +106,10 @@ ember install ember-arg-types
 
 import Component from '@glimmer/component';
 import { arg } from 'ember-arg-types';
-import { func, number, string } from 'prop-types';
+import { func, number, oneOf, string } from 'prop-types';
 import { guidFor } from '@ember/object/internals';
+
+const tunics = ['green', 'red', 'blue'];
 
 export default class CharacterComponent extends Component {
   // `id` string arg with a getter default value
@@ -110,6 +125,10 @@ export default class CharacterComponent extends Component {
   // `title` arg with default value and no type check
   @arg
   title = 'hero';
+
+  // `tunic` arg with set of valid string values and a default
+  @arg(oneOf(tunics))
+  tunic = tunics[0];
 
   // `hearts` number arg with default value
   @arg(number)
@@ -133,6 +152,7 @@ export default class CharacterComponent extends Component {
   <div class="id">{{this.id}}</div>
   <div class="name">{{this.name}}</div>
   <div class="title">{{this.title}}</div>
+  <div class="tunic">{{this.tunic}}</div>
   <div class="hearts">{{this.hearts}}</div>
   <div class="level">{{this.level}}</div>
 </div>
