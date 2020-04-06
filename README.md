@@ -81,7 +81,7 @@ You can find more information on `prop-type` validators here: [Prop Type Usage D
 If an argument value fails a validation check, an `Error` will be thrown (in non-prod environments) by default. To disable throwing `Error`s , update your `config/environment.js` with the following:
 
 ```js
-'ember-prop-types': {
+'ember-arg-types': {
   // Throw errors instead of logging (default is true)
   throwErrors: false
 }
