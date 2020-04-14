@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, skip, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 //@ts-ignore
@@ -19,6 +19,15 @@ module('Integration | Component | arg-decorator', function(hooks) {
     assert.dom('.title').hasText('hero of time', '@arg can use an initialized value as a default');
     assert.dom('.hearts').hasText('12', '@arg() can use an initialized value as a default');
     assert.dom('.level').hasNoText('@arg will pass `undefined` as a default when an initializer is not present');
+  });
+
+  skip('it uses the correct context in property initializers', async function(assert) {
+    await render(hbs`<Character @name="link" />`);
+
+    const argId = this.element.querySelector('.id')!.textContent;
+    const privateId = this.element.querySelector('._id')!.textContent;
+
+    assert.equal(argId, privateId, '@arg calls the default getter with the correct context');
   });
 
   test('it allows default overrides', async function(assert) {
