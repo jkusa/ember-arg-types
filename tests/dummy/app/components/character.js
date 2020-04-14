@@ -11,6 +11,10 @@ export default class CharacterComponent extends Component {
     return guidFor(this);
   }
 
+  get _id() {
+    return guidFor(this);
+  }
+
   @arg(string.isRequired)
   name;
 
