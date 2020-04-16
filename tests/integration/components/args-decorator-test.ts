@@ -1,4 +1,4 @@
-import { module, skip, test } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 //@ts-ignore
@@ -21,7 +21,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     assert.dom('.level').hasNoText('@arg will pass `undefined` as a default when an initializer is not present');
   });
 
-  skip('it uses the correct context in property initializers', async function(assert) {
+  test('it uses the correct context in property initializers', async function(assert) {
     await render(hbs`<Character @name="link" />`);
 
     const argId = this.element.querySelector('.id')!.textContent;
@@ -137,5 +137,33 @@ module('Integration | Component | arg-decorator', function(hooks) {
       assert.ok(true, 'A custom function can override default action');
     });
     await click('.character');
+  });
+
+  test('it supports reactive default getters', async function(assert) {
+    await render(hbs`
+      <Character
+        @name="link"
+        @title={{this.title}}
+        @formalName={{this.formalName}}
+      />
+    `);
+
+    assert
+      .dom('.formal-name')
+      .hasText('link, hero of time', '@arg can use a default getter that is computed with other args');
+
+    this.set('title', 'hero of hyrule');
+    assert
+      .dom('.formal-name')
+      .hasText('link, hero of hyrule', '@arg will recompute a default value when a dependent arg changes');
+
+    this.set('formalName', 'hero of legend');
+    assert.dom('.formal-name').hasText('hero of legend', 'an @arg default getter can be overridden with a value');
+
+    this.set('formalName', undefined);
+    this.set('title', 'hero of wind');
+    assert
+      .dom('.formal-name')
+      .hasText('link, hero of wind', '@arg will recompute a default value after given an `undefined` arg value');
   });
 });

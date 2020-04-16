@@ -12,21 +12,20 @@ function createGetter<T extends Component>(
   descriptor: any,
   validator?: Validator<any>
 ): PropertyDescriptor {
-  const defaultValue = (descriptor.get || descriptor.initializer || (() => undefined)).apply(descriptor);
-
+  const defaultInitializer = descriptor.initializer || descriptor.get || (() => undefined);
   return {
     get(this: T): any {
       const argValue = (<any>this.args)[key];
-      const returnValue = argValue !== undefined ? argValue : defaultValue;
+      const returnValue = argValue !== undefined ? argValue : defaultInitializer.call(this);
 
       runInDebug(() => {
         const throwErrors = config['ember-arg-types']?.throwErrors;
         const shouldThrowErrors = isNone(throwErrors) ? true : throwErrors;
-        throwConsoleError(() => {
-          if (validator) {
+        if (validator) {
+          throwConsoleError(() => {
             PropTypes.checkPropTypes({ [key]: validator }, { [key]: returnValue }, 'prop', this.constructor.name);
-          }
-        }, shouldThrowErrors);
+          }, shouldThrowErrors);
+        }
       });
 
       return returnValue;
