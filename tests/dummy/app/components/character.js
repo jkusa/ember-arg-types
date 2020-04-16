@@ -21,6 +21,11 @@ export default class CharacterComponent extends Component {
   @arg
   title = 'hero of time';
 
+  @arg(string)
+  get formalName() {
+    return `${this.name}, ${this.title}`;
+  }
+
   @arg(oneOf(tunics))
   tunic = tunics[0];
 
