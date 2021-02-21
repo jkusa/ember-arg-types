@@ -5,14 +5,14 @@ import hbs from 'htmlbars-inline-precompile';
 import { click, render, resetOnerror, setupOnerror, settled } from '@ember/test-helpers';
 import config from 'ember-get-config';
 
-module('Integration | Component | arg-decorator', function(hooks) {
+module('Integration | Component | arg-decorator', function (hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     resetOnerror();
   });
 
-  test('it allows defaults', async function(assert) {
+  test('it allows defaults', async function (assert) {
     await render(hbs`<Character @name="link"/>`);
 
     assert.dom('.id').hasText(/ember\d+/, '@arg can use a getter as a default value');
@@ -21,7 +21,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     assert.dom('.level').hasNoText('@arg will pass `undefined` as a default when an initializer is not present');
   });
 
-  test('it uses the correct context in property initializers', async function(assert) {
+  test('it uses the correct context in property initializers', async function (assert) {
     await render(hbs`<Character @name="link" />`);
 
     const argId = this.element.querySelector('.id')!.textContent;
@@ -30,7 +30,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     assert.equal(argId, privateId, '@arg calls the default getter with the correct context');
   });
 
-  test('it allows default overrides', async function(assert) {
+  test('it allows default overrides', async function (assert) {
     this.set('hearts', 13);
     this.set('level', 2);
     await render(hbs`
@@ -50,56 +50,38 @@ module('Integration | Component | arg-decorator', function(hooks) {
     assert.dom('.level').hasText('2', '@arg() can override component uninitialized value with `this.arg` value');
   });
 
-  test('it checks types', async function(assert) {
-    assert.expect(3);
+  test('it checks types on initial render', async function (assert) {
+    assert.expect(1);
 
-    this.set('name', 'link');
-    this.set('heart', 1);
-    this.set('level', 1);
-    await render(hbs`
-      <Character
-        @name={{this.name}}
-        @hearts={{this.heart}}
-        @level={{this.level}}
-      />
-    `);
-
-    setupOnerror(function({ message }: Error) {
-      assert.equal(
-        message,
-        'Failed prop type: Invalid prop `hearts` of type `string` supplied to `CharacterComponent`, expected `number`.',
-        'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
-      );
-    });
-    this.set('heart', 'not a number');
-    await settled();
-
-    setupOnerror(function({ message }: Error) {
-      assert.equal(
-        message,
-        'Failed prop type: Invalid prop `level` of type `string` supplied to `CharacterComponent`, expected `number`.',
-        'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
-      );
-    });
-    this.set('level', 'not a number');
-    await settled();
-
-    setupOnerror(function({ message }: Error) {
+    setupOnerror(function ({ message }: Error) {
+      debugger;
       assert.equal(
         message,
         'Failed prop type: The prop `name` is marked as required in `CharacterComponent`, but its value is `undefined`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
       );
     });
-    this.set('level', 5);
-    this.set('name', undefined);
-    await settled();
+    await render(hbs`<Character/>`);
+  });
 
-    this.set('name', 'link'); //should not throw error when set back to valid value
+  test('it checks types on arg update', async function (assert) {
+    assert.expect(1);
+
+    this.set('name', 'link');
+    await render(hbs`<Character @name={{name}} />`);
+
+    setupOnerror(function ({ message }: Error) {
+      assert.equal(
+        message,
+        'Failed prop type: Invalid prop `name` of type `number` supplied to `CharacterComponent`, expected `string`.',
+        'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
+      );
+    });
+    this.set('name', 1986);
     await settled();
   });
 
-  test('type check errors can be disabled', async function(assert) {
+  test('type check errors can be disabled', async function (assert) {
     assert.expect(1);
 
     config['ember-arg-types']!.throwErrors = false;
@@ -110,7 +92,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     config['ember-arg-types']!.throwErrors = true;
   });
 
-  test('it supports actions', async function(assert) {
+  test('it supports actions', async function (assert) {
     assert.expect(3);
 
     await render(hbs`
@@ -123,7 +105,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     await click('.character');
     assert.ok(true, 'A default function can be declared for an action');
 
-    setupOnerror(function({ message }: Error) {
+    setupOnerror(function ({ message }: Error) {
       assert.equal(
         message,
         'Failed prop type: Invalid prop `onClick` of type `string` supplied to `CharacterComponent`, expected `function`.',
@@ -139,7 +121,7 @@ module('Integration | Component | arg-decorator', function(hooks) {
     await click('.character');
   });
 
-  test('it supports reactive default getters', async function(assert) {
+  test('it supports reactive default getters', async function (assert) {
     await render(hbs`
       <Character
         @name="link"
