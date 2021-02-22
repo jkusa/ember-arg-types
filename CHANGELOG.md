@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+- [ENHANCEMENT] Relax ember-get-config dependency
+
 ## 0.2.1
 
 - [BUGFIX] Call default value getter with proper context
