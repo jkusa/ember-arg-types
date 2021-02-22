@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { arg } from 'ember-arg-types';
-import { func, number, oneOf, string } from 'prop-types';
+import { func, number, oneOf, string, boolean } from 'prop-types';
 import { guidFor } from '@ember/object/internals';
 
 const tunics = ['green', 'red', 'blue'];
