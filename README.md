@@ -1,6 +1,6 @@
 # ember-arg-types
 
-[![Build Status](https://travis-ci.org/jkusa/ember-arg-types.svg?branch=master)](https://travis-ci.org/jkusa/ember-arg-types)
+[![Build Status](https://github.com/jkusa/ember-arg-types/actions/workflows/ci.yml/badge.svg)](https://github.com/jkusa/ember-arg-types/actions?query=branch%3Amain)
 
 Runtime type checking & defaulting for [glimmer component](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments powered by [prop-types](https://github.com/facebook/prop-types) & decorators.
 
