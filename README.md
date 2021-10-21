@@ -2,11 +2,19 @@
 
 [![Build Status](https://github.com/jkusa/ember-arg-types/actions/workflows/ci.yml/badge.svg)](https://github.com/jkusa/ember-arg-types/actions?query=branch%3Amain)
 
-Runtime type checking & defaulting for [glimmer component](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments powered by [prop-types](https://github.com/facebook/prop-types) & decorators.
+## API
+
+### `@arg`
+
+Property decorator for runtime type checking and defaulting [glimmer component](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments to class properties powered by [prop-types](https://github.com/facebook/prop-types).
+
+### `@forbidExtraArgs`
+
+Class decorator for checking that only arguments with the `@arg` decorator are provided to a component (e.g. prevent mispelled or invalid arguments).
 
 ## Motivation
 
-`ember-arg-types` provides a decorator (`@arg`) that maps [glimmer](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments to local component properties. This allows default values and type checking to be easily declared (and documented) in your component JS file.
+`ember-arg-types` provides an `@arg` decorator that maps [glimmer](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments to local component properties. This allows default values and type checking to be easily declared (and documented) in your component JS file.
 
 Example:
 
@@ -19,9 +27,23 @@ Instead of this:
 
 ```js
 get sortBy() {
-  const { sortBy='id' } = this.args;
+  const { sortBy = 'id' } = this.args;
   assert('`sortBy` must be a string', typeof sortBy === 'string');
   return sortBy;
+}
+```
+
+It also provides an opt-in class decorator `@forbidExtraArgs` that will verify that all arguments passed to the component have been registered with the `@arg`. This allows you to catch easy mistakes such as mispelled or invalid arguments.
+
+```js
+import Component from '@glimmer/component';
+import { arg, forbidExtraArgs } from 'ember-arg-types';
+import { string } from 'prop-types';
+
+@forbidExtraArgs
+export default class ExampleComponent extends Component {
+  @arg(string)
+  hardToRememberArgument;
 }
 ```
 
@@ -53,9 +75,10 @@ By importing type validators from [prop-types](https://github.com/facebook/prop-
 
 ```js
 import Component from '@glimmer/component';
-import { arg } from 'ember-arg-types';
+import { arg, forbidExtraArgs } from 'ember-arg-types';
 import { string } from 'prop-types';
 
+@forbidExtraArgs
 export default class CharacterComponent extends Component {
   // `name` string arg that is required
   @arg(string.isRequired)
@@ -66,11 +89,20 @@ export default class CharacterComponent extends Component {
 ### Example Type Check Error
 
 ```hbs
-{{!-- @name should be a string, not a number --}}
-<CharacterComponent @name={{123}}>
+{{! @name should be a string, not a number }}
+<CharacterComponent @name={{123}} />
 ```
 
 ![Error Example](error-example.png)
+
+### Example Extra Argument Error
+
+```hbs
+{{! @fakeArg is not a valid argument }}
+<ExtendedCharacterComponent @name='character' @fakeArg={{true}} />
+```
+
+![Error Example](error-extra-arg-example.png)
 
 ### Prop Type Docs
 
@@ -102,15 +134,16 @@ ember install ember-arg-types
 ### Example Component Definition
 
 ```js
-// character-component.js
+// components/character.js
 
 import Component from '@glimmer/component';
-import { arg } from 'ember-arg-types';
+import { arg, forbidExtraArgs } from 'ember-arg-types';
 import { func, number, oneOf, string } from 'prop-types';
 import { guidFor } from '@ember/object/internals';
 
 const tunics = ['green', 'red', 'blue'];
 
+@forbidExtraArgs // Asserts only @arg arguments are provided
 export default class CharacterComponent extends Component {
   // `id` string arg with a getter default value
   @arg(string)
@@ -145,16 +178,16 @@ export default class CharacterComponent extends Component {
 ```
 
 ```hbs
-{{!-- character-component.hbs --}}
+{{! components/character.hbs }}
 
-{{!-- args are mapped to local properties, thus we use this.<argName> instead of @<argName> --}}
-<div class="character" role="button" {{on "click" this.onClick}}>
-  <div class="id">{{this.id}}</div>
-  <div class="name">{{this.name}}</div>
-  <div class="title">{{this.title}}</div>
-  <div class="tunic">{{this.tunic}}</div>
-  <div class="hearts">{{this.hearts}}</div>
-  <div class="level">{{this.level}}</div>
+{{! args are mapped to local properties, thus we use this.<argName> instead of @<argName> }}
+<div class='character' role='button' {{on 'click' this.onClick}}>
+  <div class='id'>{{this.id}}</div>
+  <div class='name'>{{this.name}}</div>
+  <div class='title'>{{this.title}}</div>
+  <div class='tunic'>{{this.tunic}}</div>
+  <div class='hearts'>{{this.hearts}}</div>
+  <div class='level'>{{this.level}}</div>
 </div>
 ```
 
@@ -162,10 +195,12 @@ export default class CharacterComponent extends Component {
 
 ```hbs
 <Character
-  @name="link"
-  @title="hero of time"
-  @level=2
+  @name='link'
+  @title='hero of time'
+  @level={{2}}
   @onClick={{this.onClick}}
+  @heart={{5}}
+  {{! Should be '@hearts' will catch because of @forbidExtraArgs }}
 />
 ```
 
