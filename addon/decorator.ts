@@ -8,10 +8,17 @@ import { isNone } from '@ember/utils';
 import { closest } from './-private/closest-string';
 
 const REGISTERED_ARGS = Symbol('args');
+const INTERCEPT_CLASS = 'ForbidExtraArgsIntercept';
 
 function shouldThrowErrors(): boolean {
   const throwErrors = config['ember-arg-types']?.throwErrors;
   return isNone(throwErrors) ? true : throwErrors;
+}
+
+function getClassName(instance: any): string {
+  return instance.constructor.name === INTERCEPT_CLASS // if the current class is this override
+    ? Object.getPrototypeOf(instance.constructor).name // get parent class name
+    : instance.constructor.name; // use current class name
 }
 
 function createGetter<T extends Component>(
@@ -34,7 +41,7 @@ function createGetter<T extends Component>(
         const shouldThrow = shouldThrowErrors();
         if (validator) {
           throwConsoleError(() => {
-            PropTypes.checkPropTypes({ [key]: validator }, { [key]: returnValue }, 'prop', this.constructor.name);
+            PropTypes.checkPropTypes({ [key]: validator }, { [key]: returnValue }, 'prop', getClassName(this));
           }, shouldThrow);
         }
       });
@@ -62,16 +69,12 @@ export function forbidExtraArgs(target: any) {
 
   // only sublcass in debug mode
   runInDebug(() => {
-    const interceptClass = 'ForbidExtraArgsIntercept';
     returnClass = class ForbidExtraArgsIntercept extends target {
       declare [REGISTERED_ARGS]?: Set<string>;
 
       constructor(_owner: unknown, args: Record<string, unknown>) {
         super(...arguments);
-        let component =
-          this.constructor.name === interceptClass // if the current class is this override
-            ? Object.getPrototypeOf(this.constructor).name // get parent class name
-            : this.constructor.name; // use current class name
+        let component = getClassName(this);
 
         const registeredArgs = this[REGISTERED_ARGS];
         if (!registeredArgs) {
