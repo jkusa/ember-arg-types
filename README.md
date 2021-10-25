@@ -90,7 +90,7 @@ export default class CharacterComponent extends Component {
 
 ```hbs
 {{! @name should be a string, not a number }}
-<CharacterComponent @name={{123}} />
+<Character @name={{123}} />
 ```
 
 ![Error Example](error-example.png)
@@ -98,8 +98,8 @@ export default class CharacterComponent extends Component {
 ### Example Extra Argument Error
 
 ```hbs
-{{! @fakeArg is not a valid argument }}
-<ExtendedCharacterComponent @name='character' @fakeArg={{true}} />
+{{! @numHeart should be @hearts }}
+<ExtendedCharacter @name='character' @numHeart={{3}} />
 ```
 
 ![Error Example](error-extra-arg-example.png)
