@@ -6,7 +6,7 @@
 
 ### `@arg`
 
-Property decorator for runtime type checking and defaulting [glimmer component](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) arguments to class properties powered by [prop-types](https://github.com/facebook/prop-types).
+Property decorator for declaring for [glimmer component](http://api.emberjs.com/ember/release/modules/@glimmer%2Fcomponent) argument runtime **type checks** and **default values**, powered by [facebook/prop-types](https://github.com/facebook/prop-types).
 
 ### `@forbidExtraArgs`
 
