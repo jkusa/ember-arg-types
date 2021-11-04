@@ -1,1 +1,1 @@
-export { default as arg } from './decorator';
+export { default as arg, forbidExtraArgs } from './decorator';

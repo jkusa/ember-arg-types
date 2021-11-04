@@ -5,7 +5,7 @@ import hbs from 'htmlbars-inline-precompile';
 import { click, render, resetOnerror, setupOnerror, settled } from '@ember/test-helpers';
 import config from 'ember-get-config';
 
-module('Integration | Component | arg-decorator', function (hooks) {
+module('Integration | Decorator | arg', function (hooks) {
   setupRenderingTest(hooks);
 
   hooks.beforeEach(function () {
@@ -24,8 +24,8 @@ module('Integration | Component | arg-decorator', function (hooks) {
   test('it uses the correct context in property initializers', async function (assert) {
     await render(hbs`<Character @name="link" />`);
 
-    const argId = this.element.querySelector('.id')!.textContent;
-    const privateId = this.element.querySelector('._id')!.textContent;
+    const argId = this.element.querySelector('.id')?.textContent;
+    const privateId = this.element.querySelector('._id')?.textContent;
 
     assert.equal(argId, privateId, '@arg calls the default getter with the correct context');
   });
@@ -54,7 +54,6 @@ module('Integration | Component | arg-decorator', function (hooks) {
     assert.expect(1);
 
     setupOnerror(function ({ message }: Error) {
-      debugger;
       assert.equal(
         message,
         'Failed prop type: The prop `name` is marked as required in `CharacterComponent`, but its value is `undefined`.',
@@ -68,7 +67,7 @@ module('Integration | Component | arg-decorator', function (hooks) {
     assert.expect(1);
 
     this.set('name', 'link');
-    await render(hbs`<Character @name={{name}} />`);
+    await render(hbs`<Character @name={{this.name}} />`);
 
     setupOnerror(function ({ message }: Error) {
       assert.equal(
