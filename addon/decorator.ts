@@ -1,11 +1,11 @@
 import isElementDescriptor from './-private/is-element-descriptor';
 import throwConsoleError from './-private/throw-console-error';
 import Component from '@glimmer/component';
-import { runInDebug } from '@ember/debug';
 import PropTypes, { Validator } from 'prop-types';
 import config from 'ember-get-config';
 import { isNone } from '@ember/utils';
 import { closest } from './-private/closest-string';
+import { macroCondition, isDevelopingApp } from '@embroider/macros';
 
 const REGISTERED_ARGS = Symbol('args');
 const INTERCEPT_CLASS = 'ForbidExtraArgsIntercept';
@@ -27,9 +27,11 @@ function createGetter<T extends Component>(
   descriptor: any,
   validator?: Validator<any>
 ): PropertyDescriptor {
-  const registeredArgs = target[REGISTERED_ARGS] ?? new Set<string>();
-  registeredArgs.add(key);
-  target[REGISTERED_ARGS] = registeredArgs;
+  if (macroCondition(isDevelopingApp())) {
+    const registeredArgs = target[REGISTERED_ARGS] ?? new Set<string>();
+    registeredArgs.add(key);
+    target[REGISTERED_ARGS] = registeredArgs;
+  }
 
   const defaultInitializer = descriptor.initializer || descriptor.get || (() => undefined);
   return {
@@ -37,14 +39,14 @@ function createGetter<T extends Component>(
       const argValue = (<any>this.args)[key];
       const returnValue = argValue !== undefined ? argValue : defaultInitializer.call(this);
 
-      runInDebug(() => {
+      if (macroCondition(isDevelopingApp())) {
         const shouldThrow = shouldThrowErrors();
         if (validator) {
           throwConsoleError(() => {
             PropTypes.checkPropTypes({ [key]: validator }, { [key]: returnValue }, 'prop', getClassName(this));
           }, shouldThrow);
         }
-      });
+      }
 
       return returnValue;
     },
@@ -60,7 +62,7 @@ export default function arg<T extends Component>(...args: any[]): any {
 
   const [validator] = args;
   return function argument<T extends Component>(...args: any[]): any {
-    return createGetter(...([...args, validator] as unknown as [T, string, any, Validator<any>?]));
+    return createGetter(...(([...args, validator] as unknown) as [T, string, any, Validator<any>?]));
   };
 }
 
@@ -68,7 +70,7 @@ export function forbidExtraArgs(target: any) {
   let returnClass = target;
 
   // only sublcass in debug mode
-  runInDebug(() => {
+  if (macroCondition(isDevelopingApp())) {
     returnClass = class ForbidExtraArgsIntercept extends target {
       declare [REGISTERED_ARGS]?: Set<string>;
 
@@ -98,7 +100,7 @@ export function forbidExtraArgs(target: any) {
         }
       }
     };
-  });
+  }
 
   return returnClass;
 }

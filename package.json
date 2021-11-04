@@ -30,6 +30,7 @@
     "postpack": "ember ts:clean"
   },
   "dependencies": {
+    "@embroider/macros": "^0.33.0",
     "ember-auto-import": "^1.10.1",
     "ember-cli-babel": "^7.23.1",
     "ember-cli-htmlbars": "^5.3.2",
@@ -43,9 +44,9 @@
     "@glimmer/component": "^1.0.3",
     "@glimmer/tracking": "^1.0.3",
     "@types/ember": "^3.16.0",
+    "@types/ember__test-helpers": "^1.7.2",
     "@types/ember-qunit": "^3.4.13",
     "@types/ember-resolver": "^5.0.9",
-    "@types/ember__test-helpers": "^1.7.2",
     "@types/prop-types": "^15.7.3",
     "@types/qunit": "^2.11.1",
     "@types/rsvp": "^4.0.3",
