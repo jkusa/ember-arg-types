@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- [ENHANCEMENT] Add @forbidExtraArgs decorator
+
 ## 0.3.0
 
 - [ENHANCEMENT] Relax ember-get-config dependency
