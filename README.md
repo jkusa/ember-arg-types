@@ -93,7 +93,7 @@ export default class CharacterComponent extends Component {
 <Character @name={{123}} />
 ```
 
-![Error Example](error-example.png)
+![Error Example](imgs/error-example.png)
 
 ### Example Extra Argument Error
 
@@ -102,7 +102,7 @@ export default class CharacterComponent extends Component {
 <ExtendedCharacter @name='character' @numHeart={{3}} />
 ```
 
-![Error Example](error-extra-arg-example.png)
+![Error Example](imgs/error-extra-arg-example.png)
 
 ### Prop Type Docs
 
@@ -206,9 +206,9 @@ export default class CharacterComponent extends Component {
 
 ## Compatibility
 
-- Ember.js v3.8 or above
-- Ember CLI v2.13 or above
-- Node.js v8 or above
+- Ember.js v3.20 or above
+- Ember CLI v3.20 or above
+- Node.js v12 or above
 
 ## Contributing
 

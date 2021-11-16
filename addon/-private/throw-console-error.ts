@@ -1,10 +1,10 @@
 import { macroCondition, isDevelopingApp } from '@embroider/macros';
 
-type ThrowConsoleError = (fn: Function, enabled: boolean) => void;
+type ThrowConsoleError = (fn: () => void, enabled: boolean) => void;
 
 let throwConsoleError: ThrowConsoleError;
 if (macroCondition(isDevelopingApp())) {
-  throwConsoleError = (fn: Function, enabled: boolean = true) => {
+  throwConsoleError = (fn: () => void, enabled = true) => {
     const original = console.error;
     console.error = enabled
       ? (msg: string) => {
@@ -14,6 +14,7 @@ if (macroCondition(isDevelopingApp())) {
       : original;
     try {
       fn();
+      // eslint-disable-next-line no-useless-catch
     } catch (e) {
       throw e;
     } finally {

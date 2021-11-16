@@ -1,6 +1,7 @@
 //https://github.com/emberjs/ember.js/blob/d1ad76a2b22ce470639df3dfc6efb6864a70f588/packages/%40ember/-internals/metal/lib/decorator.ts
-export default function isElementDescriptor(...args: any[]) {
-  let [maybeTarget, maybeKey, maybeDesc] = args;
+
+export default function isElementDescriptor(...args: unknown[]) {
+  const [maybeTarget, maybeKey, maybeDesc] = args;
 
   return (
     // Ensure we have the right number of args

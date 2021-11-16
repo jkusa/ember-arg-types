@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 //@ts-ignore
-import { click, render, resetOnerror, setupOnerror, settled } from '@ember/test-helpers';
+import { render, resetOnerror, setupOnerror } from '@ember/test-helpers';
 import config from 'ember-get-config';
 
 function forbidArgMessage(arg: string, component: string, expected: string[], guessedArg?: string) {
@@ -78,6 +78,8 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
   // @forbidExtraArgs extra arg error messages
 
   test('@forbidExtraArgs on top level class has correct extra arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       forbidArgMessage('fakeArg', 'TopLevelComponent', ['top']),
@@ -87,6 +89,8 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
   });
 
   test('@forbidExtraArgs on subclass has correct extra arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       forbidArgMessage('fakeArg', 'ExtendedCharacterComponent', extendedArgs),
@@ -96,6 +100,8 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
   });
 
   test('@forbidExtraArgs implicit on subclass has correct extra arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       forbidArgMessage('fakeArg', 'ExtendedImplicitComponent', extendedArgs),
@@ -105,6 +111,8 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
   });
 
   test('@forbidExtraArgs explicit on subclass has correct extra arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       forbidArgMessage('fakeArg', 'ExtendedExplicitComponent', extendedArgs),
@@ -116,6 +124,8 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
   // @forbidExtraArgs wrong arg error messages
 
   test('@forbidExtraArgs on top level class has correct wrong arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       wrongPropMessage('top', 'string', 'TopLevelComponent', 'number'),
@@ -124,7 +134,9 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
     await render(hbs`<TopLevel @top="wrong" />`);
   });
 
-  test('@forbidExtraArgs on subclass has correct extra arg error', async function (assert) {
+  test('@forbidExtraArgs on subclass has correct arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       wrongPropMessage('version', 'string', 'ExtendedCharacterComponent', 'number'),
@@ -133,7 +145,9 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
     await render(hbs`<ExtendedCharacter @name="name" @version="wrong" />`);
   });
 
-  test('@forbidExtraArgs implicit on subclass has correct extra arg error', async function (assert) {
+  test('@forbidExtraArgs implicit on subclass has correct arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       wrongPropMessage('version', 'string', 'ExtendedImplicitComponent', 'number'),
@@ -142,7 +156,9 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
     await render(hbs`<ExtendedImplicit @name="name" @version="wrong" />`);
   });
 
-  test('@forbidExtraArgs explicit on subclass has correct extra arg error', async function (assert) {
+  test('@forbidExtraArgs explicit on subclass has correct arg error', async function (assert) {
+    assert.expect(1);
+
     renderError(
       assert,
       wrongPropMessage('version', 'string', 'ExtendedExplicitComponent', 'number'),
