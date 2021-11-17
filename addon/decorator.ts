@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import isElementDescriptor from './-private/is-element-descriptor';
 import throwConsoleError from './-private/throw-console-error';
 import Component from '@glimmer/component';
@@ -25,7 +26,7 @@ function createGetter<T extends Component>(
   target: any,
   key: string,
   descriptor: any,
-  validator?: Validator<any>
+  validator?: Validator<unknown>
 ): PropertyDescriptor {
   if (macroCondition(isDevelopingApp())) {
     const registeredArgs = target[REGISTERED_ARGS] ?? new Set<string>();
@@ -62,21 +63,22 @@ export default function arg<T extends Component>(...args: any[]): any {
 
   const [validator] = args;
   return function argument<T extends Component>(...args: any[]): any {
-    return createGetter(...(([...args, validator] as unknown) as [T, string, any, Validator<any>?]));
+    return createGetter(...([...args, validator] as unknown as [T, string, any, Validator<any>?]));
   };
 }
 
 export function forbidExtraArgs(target: any) {
   let returnClass = target;
 
-  // only sublcass in debug mode
+  // only subclass in debug mode
   if (macroCondition(isDevelopingApp())) {
     returnClass = class ForbidExtraArgsIntercept extends target {
       declare [REGISTERED_ARGS]?: Set<string>;
 
       constructor(_owner: unknown, args: Record<string, unknown>) {
+        // eslint-disable-next-line prefer-rest-params
         super(...arguments);
-        let component = getClassName(this);
+        const component = getClassName(this);
 
         const registeredArgs = this[REGISTERED_ARGS];
         if (!registeredArgs) {
