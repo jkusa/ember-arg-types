@@ -10,7 +10,7 @@ Property decorator for declaring for [glimmer component](http://api.emberjs.com/
 
 ### `@forbidExtraArgs`
 
-Class decorator for checking that only arguments with the `@arg` decorator are provided to a component (e.g. prevent mispelled or invalid arguments).
+Class decorator for checking that only arguments with the `@arg` decorator are provided to a component (e.g. prevent misspelled or invalid arguments).
 
 ## Motivation
 
@@ -33,7 +33,7 @@ get sortBy() {
 }
 ```
 
-It also provides an opt-in class decorator `@forbidExtraArgs` that will verify that all arguments passed to the component have been registered with the `@arg`. This allows you to catch easy mistakes such as mispelled or invalid arguments.
+It also provides an opt-in class decorator `@forbidExtraArgs` that will verify that all arguments passed to the component have been registered with the `@arg`. This allows you to catch easy mistakes such as misspelled or invalid arguments.
 
 ```js
 import Component from '@glimmer/component';
