@@ -80,10 +80,7 @@ export function forbidExtraArgs(target: any) {
         super(...arguments);
         const component = getClassName(this);
 
-        const registeredArgs = this[REGISTERED_ARGS];
-        if (!registeredArgs) {
-          return;
-        }
+        const registeredArgs = this[REGISTERED_ARGS] ?? new Set();
         const unRegisteredArg = Object.keys(args).find((arg) => !registeredArgs.has(arg));
 
         if (unRegisteredArg) {
