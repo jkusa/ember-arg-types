@@ -38,6 +38,22 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
     assert.dom('.name').hasText('valid', 'When @forbidExtraArgs is not present, no errors are thrown for extra args');
   });
 
+  test('it renders components when correct values are passed', async function (assert) {
+    assert.expect(4);
+
+    await render(hbs`<ExtendedCharacter @name="valid" @version={{3}} />`);
+    assert.dom('.version').hasText('3', 'It renders ExtendedCharacter component');
+
+    await render(hbs`<ExtendedExplicit @name="valid" @version={{4}} />`);
+    assert.dom('.version').hasText('4', 'It renders ExtendedExplicit component');
+
+    await render(hbs`<TopLevel @top={{10}} />`);
+    assert.dom('.top').hasText('10', 'It renders TopLevel component');
+
+    await render(hbs`<NoArgs />`);
+    assert.dom().hasText('No Args Here', 'It renders NoArgs component');
+  });
+
   test('extra arg errors can be disabled', async function (assert) {
     assert.expect(1);
 
@@ -51,7 +67,7 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
     config['ember-arg-types']!.throwErrors = true;
   });
 
-  test('it forbids extra arguments', async function (assert) {
+  test('it forbids extra arguments when args are registered', async function (assert) {
     assert.expect(1);
 
     renderError(
@@ -61,6 +77,17 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
     );
 
     await render(hbs`<ExtendedCharacter @name="name" @fakeArg="fake" />`);
+  });
+
+  test('it forbids extra arguments when no args are registered', async function (assert) {
+    assert.expect(1);
+
+    renderError(
+      assert,
+      forbidArgMessage('fakeArg', 'NoArgsComponent', []),
+      '@forbidExtraArgs on a component with no args has extra error message'
+    );
+    await render(hbs`<NoArgs @fakeArg="fake" />`);
   });
 
   test('it provides suggestions for similar args', async function (assert) {
