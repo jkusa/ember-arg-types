@@ -3,7 +3,6 @@ import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 //@ts-ignore
 import { render, resetOnerror, setupOnerror } from '@ember/test-helpers';
-import config from 'ember-get-config';
 
 function forbidArgMessage(arg: string, component: string, expected: string[], guessedArg?: string) {
   const expectedArgs = expected.map((arg) => `'${arg}'`).join(',');
@@ -56,6 +55,8 @@ module('Integration | Decorator | forbidExtraArgs', function (hooks) {
 
   test('extra arg errors can be disabled', async function (assert) {
     assert.expect(1);
+
+    const config = this.owner.resolveRegistration('config:environment');
 
     config['ember-arg-types']!.throwErrors = false;
 

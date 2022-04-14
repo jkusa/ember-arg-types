@@ -3,7 +3,7 @@ import isElementDescriptor from './-private/is-element-descriptor';
 import throwConsoleError from './-private/throw-console-error';
 import Component from '@glimmer/component';
 import PropTypes, { Validator } from 'prop-types';
-import config from 'ember-get-config';
+import { getOwner } from '@ember/application';
 import { isNone } from '@ember/utils';
 import { closest } from './-private/closest-string';
 import { macroCondition, isDevelopingApp } from '@embroider/macros';
@@ -11,7 +11,8 @@ import { macroCondition, isDevelopingApp } from '@embroider/macros';
 const REGISTERED_ARGS = Symbol('args');
 const INTERCEPT_CLASS = 'ForbidExtraArgsIntercept';
 
-function shouldThrowErrors(): boolean {
+function shouldThrowErrors(owner: any): boolean {
+  const config = owner.resolveRegistration('config:environment');
   const throwErrors = config['ember-arg-types']?.throwErrors;
   return isNone(throwErrors) ? true : throwErrors;
 }
@@ -41,7 +42,7 @@ function createGetter<T extends Component>(
       const returnValue = argValue !== undefined ? argValue : defaultInitializer.call(this);
 
       if (macroCondition(isDevelopingApp())) {
-        const shouldThrow = shouldThrowErrors();
+        const shouldThrow = shouldThrowErrors(getOwner(this));
         if (validator) {
           throwConsoleError(() => {
             PropTypes.checkPropTypes({ [key]: validator }, { [key]: returnValue }, 'prop', getClassName(this));
@@ -75,7 +76,7 @@ export function forbidExtraArgs(target: any) {
     returnClass = class ForbidExtraArgsIntercept extends target {
       declare [REGISTERED_ARGS]?: Set<string>;
 
-      constructor(_owner: unknown, args: Record<string, unknown>) {
+      constructor(owner: unknown, args: Record<string, unknown>) {
         // eslint-disable-next-line prefer-rest-params
         super(...arguments);
         const component = getClassName(this);
@@ -90,7 +91,7 @@ export function forbidExtraArgs(target: any) {
 
           const msg = `Failed extra args check: Invalid argument \`@${unRegisteredArg}\` ${suggestion}supplied to \`${component}\`, expected [${expected}]`;
 
-          const shouldThrow = shouldThrowErrors();
+          const shouldThrow = shouldThrowErrors(owner);
           if (shouldThrow) {
             throw new Error(msg);
           } else {

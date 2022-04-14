@@ -3,7 +3,6 @@ import { setupRenderingTest } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 //@ts-ignore
 import { click, render, resetOnerror, setupOnerror, settled } from '@ember/test-helpers';
-import config from 'ember-get-config';
 
 module('Integration | Decorator | arg', function (hooks) {
   setupRenderingTest(hooks);
@@ -82,6 +81,8 @@ module('Integration | Decorator | arg', function (hooks) {
 
   test('type check errors can be disabled', async function (assert) {
     assert.expect(1);
+
+    const config = this.owner.resolveRegistration('config:environment');
 
     config['ember-arg-types']!.throwErrors = false;
 
