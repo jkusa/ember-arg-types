@@ -30,7 +30,7 @@
     "postpack": "ember ts:clean"
   },
   "dependencies": {
-    "@embroider/macros": "^0.33.0",
+    "@embroider/macros": "^1.8.1",
     "ember-auto-import": "^1.11.3",
     "ember-cli-babel": "^7.26.6",
     "ember-cli-htmlbars": "^5.7.1",
