@@ -2,7 +2,8 @@
 import isElementDescriptor from './-private/is-element-descriptor';
 import throwConsoleError from './-private/throw-console-error';
 import Component from '@glimmer/component';
-import PropTypes, { Validator } from 'prop-types';
+import * as PropTypes from 'prop-types';
+import { Validator } from 'prop-types';
 import config from 'ember-get-config';
 import { isNone } from '@ember/utils';
 import { closest } from './-private/closest-string';

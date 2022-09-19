@@ -7,7 +7,7 @@ export let closest: Closest;
 
 if (macroCondition(isDevelopingApp())) {
   // https://stackoverflow.com/a/36566052
-  function editDistance(s1: string, s2: string) {
+  function editDistance(s1: string, s2: string): number {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();
 
@@ -18,9 +18,9 @@ if (macroCondition(isDevelopingApp())) {
         if (i == 0) costs[j] = j;
         else {
           if (j > 0) {
-            let newValue = costs[j - 1];
+            let newValue = costs[j - 1] as number;
             if (s1.charAt(i - 1) != s2.charAt(j - 1)) {
-              newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+              newValue = Math.min(Math.min(newValue, lastValue), costs[j] as number) + 1;
             }
             costs[j - 1] = lastValue;
             lastValue = newValue;
@@ -29,7 +29,7 @@ if (macroCondition(isDevelopingApp())) {
       }
       if (i > 0) costs[s2.length] = lastValue;
     }
-    return costs[s2.length];
+    return costs[s2.length] as number;
   }
 
   function similar(s1: string, s2: string) {
@@ -50,7 +50,7 @@ if (macroCondition(isDevelopingApp())) {
     let score = 0;
     let index = 0;
     for (let i = 0; i < options.length; i++) {
-      const currentScore = similar(str, options[i]);
+      const currentScore = similar(str, options[i] as string);
       if (currentScore > score) {
         index = i;
         score = currentScore;
