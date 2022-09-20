@@ -28,7 +28,7 @@
     "postpublish": "ember ts:clean",
     "prepack": "ember ts:precompile",
     "postpack": "ember ts:clean",
-    "version": "auto-changelog -p --template=keepachangelog && git add CHANGELOG.md"
+    "version": "auto-changelog -p --template=keepachangelog --breaking-pattern \"BREAKING CHANGE:\" && git add CHANGELOG.md"
   },
   "dependencies": {
     "@embroider/macros": "^1.8.1",
