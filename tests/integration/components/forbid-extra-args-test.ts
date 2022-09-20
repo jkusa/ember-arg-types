@@ -17,7 +17,8 @@ function wrongPropMessage(prop: string, actualType: string, component: string, e
 
 function renderError(assert: Assert, errorMessage: string, assertMessage: string) {
   assert.expect(1);
-  setupOnerror(function ({ message }: Error) {
+  setupOnerror(function (error: unknown) {
+    const { message } = error as Error;
     assert.equal(message, errorMessage, assertMessage);
   });
 }

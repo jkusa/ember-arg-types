@@ -27,7 +27,7 @@ module('Integration | Decorator | arg', function (hooks) {
     const argId = this.element.querySelector('.id')?.textContent;
     const privateId = this.element.querySelector('._id')?.textContent;
 
-    assert.equal(argId, privateId, '@arg calls the default getter with the correct context');
+    assert.strictEqual(argId, privateId, '@arg calls the default getter with the correct context');
   });
 
   test('it allows default overrides', async function (assert) {
@@ -53,8 +53,9 @@ module('Integration | Decorator | arg', function (hooks) {
   test('it checks types on initial render', async function (assert) {
     assert.expect(1);
 
-    setupOnerror(function ({ message }: Error) {
-      assert.equal(
+    setupOnerror(function (error: unknown) {
+      const { message } = error as Error;
+      assert.strictEqual(
         message,
         'Failed prop type: The prop `name` is marked as required in `CharacterComponent`, but its value is `undefined`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
@@ -69,8 +70,9 @@ module('Integration | Decorator | arg', function (hooks) {
     this.set('name', 'link');
     await render(hbs`<Character @name={{this.name}} />`);
 
-    setupOnerror(function ({ message }: Error) {
-      assert.equal(
+    setupOnerror(function (error: unknown) {
+      const { message } = error as Error;
+      assert.strictEqual(
         message,
         'Failed prop type: Invalid prop `name` of type `number` supplied to `CharacterComponent`, expected `string`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
@@ -104,8 +106,9 @@ module('Integration | Decorator | arg', function (hooks) {
     await click('.character');
     assert.ok(true, 'A default function can be declared for an action');
 
-    setupOnerror(function ({ message }: Error) {
-      assert.equal(
+    setupOnerror(function (error: unknown) {
+      const { message } = error as Error;
+      assert.strictEqual(
         message,
         'Failed prop type: Invalid prop `onClick` of type `string` supplied to `CharacterComponent`, expected `function`.',
         'If @args() contains a PropType validator, an error will be thrown if the value is incorrect'
