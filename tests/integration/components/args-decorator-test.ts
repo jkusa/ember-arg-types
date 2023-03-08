@@ -24,8 +24,8 @@ module('Integration | Decorator | arg', function (hooks) {
   test('it uses the correct context in property initializers', async function (assert) {
     await render(hbs`<Character @name="link" />`);
 
-    const argId = this.element.querySelector('.id')?.textContent;
-    const privateId = this.element.querySelector('._id')?.textContent;
+    const argId = document.querySelector('.id')?.textContent;
+    const privateId = document.querySelector('._id')?.textContent;
 
     assert.strictEqual(argId, privateId, '@arg calls the default getter with the correct context');
   });
